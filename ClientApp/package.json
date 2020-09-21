@@ -7,13 +7,16 @@
     "axios": "^0.20.0",
     "bootstrap": "^4.3.1",
     "jquery": "3.3.1",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-notification-alert": "0.0.12",
+    "react-notifications": "^1.7.2",
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.2.2",
     "react-scripts": "^1.1.5",
     "reactstrap": "^6.3.0",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "simple-react-notifications": "^1.2.16"
   },
   "devDependencies": {
     "ajv": "^6.0.0",

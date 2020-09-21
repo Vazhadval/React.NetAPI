@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Alert } from '@material-ui/core';
+import NotificationAlert from 'react-notification-alert';
+import "react-notification-alert/dist/animate.css";
+
+
 
 export class Home extends Component {
     static displayName = Home.name;
@@ -18,9 +21,11 @@ export class Home extends Component {
         };
     }
 
+
     render() {
         return (
             <div>
+                <NotificationAlert ref="notify" />
                 <div>
                     <h1>Add Product</h1>
                 </div>
@@ -32,9 +37,9 @@ export class Home extends Component {
                             className="form-control col-md-2"
                             placeholder="Enter Product Name"
                             onChange={(e) => this.handleChangeProductName(e)}
+                            value={this.state.productName}
                         />
                     </div>
-                    <Alert severity="warning">This is an error alert — check it out!</Alert>
                     <div className="form-inline mt-2 mb-2">
                         <label>Property Name:</label>
                         <input
@@ -91,6 +96,10 @@ export class Home extends Component {
         );
     }
 
+    notificationAlert(options) {
+        this.refs.notificationAlert.notificationAlert(options);
+    }
+
     handleFileSelected(event) {
         this.setState({ photo: event.target.files[0] });
     }
@@ -117,9 +126,16 @@ export class Home extends Component {
                     //handle error
                     console.log(response);
                 });
+            this.setState({ productName: "" });
+            this.setState({ propertyname: "" });
+            this.setState({ propertyValue: "" });
+            this.setState({ properties: [] });
+            this.setState({ photo: "" });
         }
         else {
-            alert();
+
+
+            this.refs.notify.notificationAlert(options);
         }
     }
 
@@ -159,4 +175,18 @@ export class Home extends Component {
             this.textInput.focus();
         }
     }
+}
+
+var options = {
+    place: 'br',
+    message: (
+        <div>
+            <div>
+                Fill all fields stranger!
+                        </div>
+        </div>
+    ),
+    type: "warning",
+    icon: "now-ui-icons ui-1_bell-53",
+    autoDismiss: 3
 }
