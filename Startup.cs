@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,10 +7,12 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using React.Data.DBContext;
 using React.Repository.Implementation;
 using React.Repository.Interfaces;
+using System.Text;
 
 namespace React
 {
@@ -27,21 +30,25 @@ namespace React
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddCors();
+
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("default")));
 
             services.AddScoped<AppDbContext>();
 
             services.AddScoped<IProductService, ProductService>();
 
-            //services.AddSwaggerGen(o =>
-            //{
-            //    o.SwaggerDoc("v1", new OpenApiInfo
-            //    {
-            //        Title = "Swagger API",
-            //        Description = "Dem API",
-            //        Version = "v1"
-            //    });
-            //});
+            services.AddScoped<IAuthService, AuthService>();
+
+            services.AddSwaggerGen(o =>
+            {
+                o.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Swagger API",
+                    Description = "Dem API",
+                    Version = "v1"
+                });
+            });
 
 
             // In production, the React files will be served from this directory
@@ -49,18 +56,31 @@ namespace React
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                 .AddJwtBearer(options =>
+                 {
+                     options.TokenValidationParameters = new TokenValidationParameters
+                     {
+                         ValidateIssuerSigningKey = true,
+                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+                             .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                         ValidateIssuer = false,
+                         ValidateAudience = false
+                     };
+                 });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //app.UseSwagger();
+            app.UseSwagger();
 
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            //    c.RoutePrefix = "";
-            //});
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = "";
+            });
 
             if (env.IsDevelopment())
             {
@@ -76,6 +96,10 @@ namespace React
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+            app.UseAuthentication();
 
 
             app.UseMvc(routes =>

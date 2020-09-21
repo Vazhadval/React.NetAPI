@@ -16,5 +16,6 @@ namespace React.Data.DBContext
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Property> Properties { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

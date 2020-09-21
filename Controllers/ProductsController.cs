@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -11,6 +12,7 @@ using React.Repository.Interfaces;
 
 namespace React.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
@@ -23,21 +25,21 @@ namespace React.Controllers
         }
 
         [HttpGet]
-        [Route("/Products/GetAll")]
+        [Route("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _productService.GetProducts());
         }
 
         [HttpGet]
-        [Route("/Products/GetById")]
+        [Route("GetById")]
         public async Task<IActionResult> GetById(int id)
         {
             return Ok(await _productService.GetById(id));
         }
 
         [HttpPost]
-        [Route("/Products/AddProduct")]
+        [Route("Addproduct")]
         public async Task<IActionResult> AddProduct([FromForm] AddProductRequest p)
         {
             return Ok(await _productService.AddProduct(p));
@@ -45,14 +47,14 @@ namespace React.Controllers
 
 
         [HttpPost]
-        [Route("/Products/EditProduct")]
+        [Route("EditProduct")]
         public async Task<IActionResult> EditProduct([FromBody] Product p)
         {
             return Ok(await _productService.EditProduct(p));
         }
 
         [HttpPost]
-        [Route("/Products/SearchProduct")]
+        [Route("SearchProduct")]
         public async Task<IActionResult> SearchProduct(string searchTerm)
         {
             return Ok(await _productService.SearchProduct(searchTerm));
