@@ -4,3 +4,24 @@
 .asd {
     background-color: grey;
 }
+
+
+
+.form-control, .btn {
+    min-height: 38px;
+    border-radius: 2px;
+}
+
+.btn {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.loginHeader {
+    justify-content: space-between;
+    width: 300px;
+}
+
+.loginForm {
+    background-color: red;
+}
