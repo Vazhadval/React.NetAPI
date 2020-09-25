@@ -22,7 +22,7 @@ export default class App extends Component {
 const PrivateRoute = ({ component: Component, ...rest }) => {
     return (
         <Route {...rest} render={(props) =>
-            true ? <Component {...props} />
+            !true ? <Component {...props} />
                 : <Redirect to='/Login' />
         } />
     );

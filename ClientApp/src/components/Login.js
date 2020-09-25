@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import axios from 'axios';
 
 export class Login extends Component {
 
@@ -6,6 +7,7 @@ export class Login extends Component {
         super(props);
         this.state = {
             loggedIn: false,
+            isLogin: true,
             username: "",
             password: "",
         }
@@ -15,11 +17,11 @@ export class Login extends Component {
     render() {
         return (
             <div className="d-flex justify-content-around">
-                <form className="col-md-5">
+                <div className="col-md-5">
                     <div className="row justify-content-between">
-                        <h2 className="text-center">Log in</h2>
+                        <h2 className="text-center pl-3">{this.state.isLogin ? 'Log in' : 'Sign up'}</h2>
                         <div>
-                            <button className="btn btn-secondary btn-sm">Sign up</button>
+                            <button className="btn btn-secondary btn-sm pr-3" onClick={() => this.handleSwitchLogin()}>{this.state.isLogin ? 'Sign up' : 'Log in'}</button>
                         </div>
                     </div>
                     <div className="form-group">
@@ -43,12 +45,21 @@ export class Login extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <button type="submit" className="btn btn-primary btn-block">Log in</button>
+                        <button
+                            className="btn btn-primary btn-block"
+                            onClick={() => this.handleLogin()}
+                        >
+                            {this.state.isLogin ? 'Log in' : 'Sign up'}
+                        </button>
                     </div>
-                </form>
+                </div>
             </div>
         );
 
+    }
+
+    handleSwitchLogin() {
+        this.setState({ isLogin: !this.state.isLogin });
     }
 
     handleUsernameOnChange(e) {
@@ -57,6 +68,34 @@ export class Login extends Component {
 
     handlePasswordOnChange(e) {
         this.setState({ password: e.target.value });
+    }
+
+    handleLogin() {
+        if (!this.state.isLogin) {
+            var req = {
+                username: this.state.username,
+                password: this.state.password
+            };
+            fetch('https://localhost:44329/api/users/register', {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(req)
+            }).then(res => {
+                console.log(res);
+            });
+        } else {
+            var req = {
+                username: this.state.username,
+                password: this.state.password
+            };
+            fetch('https://localhost:44329/api/users/login', {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(req)
+            }).then(res => res.json())
+                .then(data => console.log(data.token));
+        }
+
     }
 }
 
