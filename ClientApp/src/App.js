@@ -12,20 +12,11 @@ export default class App extends Component {
         return (
             <Layout>
                 <Route path='/Login' component={Login} />
-                <PrivateRoute exact path='/Home' component={Home} />
-                <PrivateRoute path='/fetch-data' component={FetchData} />
+                <Route exact path='/Home' component={Home} />
+                <Route path='/fetch-data' component={FetchData} />
             </Layout>
         );
     }
-}
-
-const PrivateRoute = ({ component: Component, ...rest }) => {
-    return (
-        <Route {...rest} render={(props) =>
-            !true ? <Component {...props} />
-                : <Redirect to='/Login' />
-        } />
-    );
 }
 
 

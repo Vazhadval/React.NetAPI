@@ -89,6 +89,8 @@ namespace React.Controllers
 
             return Ok(new
             {
+                UserID = userFromRepo.Id,
+                Username = userFromRepo.Username,
                 token = tokenHandler.WriteToken(token)
             });
         }

@@ -92,8 +92,14 @@ export class Login extends Component {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(req)
-            }).then(res => res.json())
-                .then(data => console.log(data.token));
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data.token);
+                    localStorage.setItem("token", data.token);
+                    this.setState({ loggedIn: true });
+                })
+                .catch(err => console.log(err));
         }
 
     }

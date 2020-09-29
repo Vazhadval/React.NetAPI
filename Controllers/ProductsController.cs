@@ -12,7 +12,6 @@ using React.Repository.Interfaces;
 
 namespace React.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
