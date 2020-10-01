@@ -29,6 +29,7 @@ namespace React.Repository.Implementation
             var fileName = $"img_{p.Photo.FileName.Substring(0, p.Photo.FileName.LastIndexOf("."))}_{DateTime.Now.ToString("dd-MM-yyyy-hh-mm-ss")}";
             var mime = p.Photo.FileName.Substring(p.Photo.FileName.LastIndexOf("."));
             string url = $"{_env.WebRootPath}\\Uploads\\{fileName + mime}";
+            string urlForPhoto = $"\\Uploads\\{fileName + mime}";
 
             if (p.Photo.Length > 0)
             {
@@ -43,8 +44,9 @@ namespace React.Repository.Implementation
             var product = new Product()
             {
                 Name = p.Name,
+                Description = p.Description,
                 Properties = property.Select(x => new Property() { PropertyName = x.propertyname, PropertyValue = x.PropertyValue }).ToList(),
-                PhotoUrl = url
+                PhotoUrl = urlForPhoto
             };
 
             _context.Products.Add(product);
@@ -59,7 +61,7 @@ namespace React.Repository.Implementation
             var productFromDb = await _context.Products.SingleOrDefaultAsync(x => x.Id == p.Id);
             productFromDb.Name = p.Name;
             productFromDb.Properties = p.Properties;
-            await SaveChanges();
+            SaveChanges();
             return productFromDb;
         }
 
@@ -76,13 +78,29 @@ namespace React.Repository.Implementation
 
         public async Task<List<Product>> SearchProduct(string searchTerm)
         {
-            return await _context.Products.Where(x => x.Name.Contains(searchTerm)).ToListAsync();
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                return await _context.Products.ToListAsync();
+            }
+            return await _context.Products.Where(x => x.Name.ToLower().Contains(searchTerm.ToLower())).ToListAsync();
 
         }
 
-        public async Task SaveChanges()
+        public void SaveChanges()
         {
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
+        }
+
+        public void DeleteProduct(Product p)
+        {
+            _context.Properties.RemoveRange(_context.Properties.Where(x => x.ProductId == p.Id));
+            _context.Products.Remove(p);
+            SaveChanges();
+        }
+
+        public void DeleteProduct(int id)
+        {
+            DeleteProduct(_context.Products.SingleOrDefault(x => x.Id == id));
         }
     }
 }

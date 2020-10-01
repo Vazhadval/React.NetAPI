@@ -95,7 +95,6 @@ export class Login extends Component {
             })
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data.token);
                     localStorage.setItem("token", data.token);
                     this.setState({ loggedIn: true });
                 })

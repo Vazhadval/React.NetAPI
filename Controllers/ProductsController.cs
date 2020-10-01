@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -53,8 +54,24 @@ namespace React.Controllers
         }
 
         [HttpPost]
+        [Route("DeleteProduct")]
+        public async Task<IActionResult> DeleteProduct([FromBody] Product p)
+        {
+            _productService.DeleteProduct(p);
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("DeleteProductById")]
+        public async Task<IActionResult> DeleteProduct([FromBody] ProductForDeletion p)
+        {
+            _productService.DeleteProduct(p.Id);
+            return Ok();
+        }
+
+        [HttpGet]
         [Route("SearchProduct")]
-        public async Task<IActionResult> SearchProduct(string searchTerm)
+        public async Task<IActionResult> SearchProduct([FromQuery] string searchTerm)
         {
             return Ok(await _productService.SearchProduct(searchTerm));
         }

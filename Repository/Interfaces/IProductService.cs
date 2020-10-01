@@ -15,6 +15,8 @@ namespace React.Repository.Interfaces
         Task<Product> EditProduct(Product p);
         Task<Product> AddProduct(AddProductRequest p);
         Task<List<Product>> SearchProduct(string searchTerm);
-        Task SaveChanges();
+        void SaveChanges();
+        void DeleteProduct(Product p);
+        void DeleteProduct(int id);
     }
 }

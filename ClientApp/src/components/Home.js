@@ -13,6 +13,7 @@ export class Home extends Component {
         this.textInput = null;
         this.state = {
             productName: "",
+            productDescription: "",
             propertyName: "",
             propertyValue: "",
             photo: "",
@@ -38,6 +39,16 @@ export class Home extends Component {
                             placeholder="Enter Product Name"
                             onChange={(e) => this.handleChangeProductName(e)}
                             value={this.state.productName}
+                        />
+                    </div>
+                    <label>Product Description:</label>
+                    <div >
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter Product Description"
+                            onChange={(e) => this.handleChangeProductDescription(e)}
+                            value={this.state.productDescription}
                         />
                     </div>
                     <div className="form-inline mt-2 mb-2">
@@ -110,11 +121,11 @@ export class Home extends Component {
             formData.append("Name", this.state.productName);
             formData.append("Properties", JSON.stringify(this.state.properties));
             formData.append("Photo", this.state.photo, this.state.photo.name);
+            formData.append("Description", this.state.productDescription);
 
-            console.log(formData.get("Photo"));
             axios({
                 method: 'post',
-                url: 'https://localhost:44329//Products/AddProduct',
+                url: 'https://localhost:44329/api/Products/AddProduct',
                 data: formData,
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
@@ -165,6 +176,9 @@ export class Home extends Component {
         this.setState({ propertyValue: event.target.value });
     }
 
+    handleChangeProductDescription(event) {
+        this.setState({ productDescription: event.target.value });
+    }
 
     handleConfirm() {
         if (this.state.propertyName !== "" && this.state.propertyValue !== "") {
