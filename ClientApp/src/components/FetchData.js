@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Button, Form } from 'reactstrap';
 import { param } from 'jquery';
 import Axios from 'axios';
@@ -33,22 +33,28 @@ export class FetchData extends Component {
         return (
             <div>
                 <div className="form-inline">
+                    {
+                        products.length > 0 ?
+                            <Fragment>
+                                <input
+                                    className="form-control form-control col-md-5"
+                                    type="text"
+                                    placeholder="Search"
+                                    aria-label="Search"
+                                    onChange={(e) => handleSearchOnChange(e)}
+                                    value={searchTerm}
+                                    onKeyPress={(e) => handleOnKeyPress(e)}
+                                />
+                                <a
+                                    className="btn btn-secondary btn ml-3"
+                                    onClick={handleSearch}
+                                >
+                                    <i className="fa fa-search" aria-hidden="true"></i>
+                                </a>
+                            </Fragment>
+                            : null
+                    }
 
-                    <input
-                        className="form-control form-control col-md-5"
-                        type="text"
-                        placeholder="Search"
-                        aria-label="Search"
-                        onChange={(e) => handleSearchOnChange(e)}
-                        value={searchTerm}
-                        onKeyPress={(e) => handleOnKeyPress(e)}
-                    />
-                    <a
-                        className="btn btn-secondary btn ml-3"
-                        onClick={handleSearch}
-                    >
-                        <i className="fa fa-search" aria-hidden="true"></i>
-                    </a>
 
                 </div>
                 <div>
